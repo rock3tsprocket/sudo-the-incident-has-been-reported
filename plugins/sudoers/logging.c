@@ -320,10 +320,11 @@ log_denial(const struct sudoers_context *ctx, unsigned int status,
 
 	if (ISSET(status, FLAG_NO_USER)) {
 	    sudo_printf(SUDO_CONV_ERROR_MSG, _("%s is not in the sudoers "
-		"file.\n"), ctx->user.name);
+		"file.  This incident will be reported.\n"), ctx->user.name);
 	} else if (ISSET(status, FLAG_NO_HOST)) {
 	    sudo_printf(SUDO_CONV_ERROR_MSG, _("%s is not allowed to run sudo "
-		"on %s.\n"), ctx->user.name, ctx->runas.shost);
+		"on %s.  This incident will be reported.\n"),
+		ub_name);
 	} else if (ISSET(status, FLAG_INTERCEPT_SETID)) {
 	    sudo_printf(SUDO_CONV_ERROR_MSG, _("%s: %s\n"), getprogname(),
 		_("setid commands are not permitted in intercept mode"));
@@ -352,10 +353,6 @@ log_denial(const struct sudoers_context *ctx, unsigned int status,
 	    if (def_cmddenial_message != NULL) {
 		sudo_printf(SUDO_CONV_ERROR_MSG, "%s\n", def_cmddenial_message);
 	    }
-	}
-	if (mailit) {
-	    sudo_printf(SUDO_CONV_ERROR_MSG, "%s",
-		_("This incident has been reported to the administrator.\n"));
 	}
 	sudoers_setlocale(oldlocale, NULL);
     }
